@@ -1,76 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Carro A-Frame</title>
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-</head>
+  <head>
+    <title>A-Frame: Carro com Movimentação</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script>
+      // Componente para controlar a movimentação
+      AFRAME.registerComponent('controle-carro', {
+        schema: { velocidade: {type: 'number', default: 0.1} },
+        init: function () {
+          this.teclas = {};
+          window.addEventListener('keydown', (e) => { this.teclas[e.key] = true; });
+          window.addEventListener('keyup', (e) => { this.teclas[e.key] = false; });
+        },
+        tick: function () {
+          let pos = this.el.getAttribute('position');
+          if (this.teclas['w'] || this.teclas['ArrowUp']) pos.z -= this.schema.velocidade;
+          if (this.teclas['s'] || this.teclas['ArrowDown']) pos.z += this.schema.velocidade;
+          if (this.teclas['a'] || this.teclas['ArrowLeft']) pos.x -= this.schema.velocidade;
+          if (this.teclas['d'] || this.teclas['ArrowRight']) pos.x += this.schema.velocidade;
+          
+          this.el.setAttribute('position', pos);
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-plane position="0 0 0" rotation="-90 0 0" width="50" height="50" color="#7BC8A4"></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
 
-<body>
-  <a-scene>
+      <a-entity id="player" controle-carro position="0 0 5">
+        
+        <a-entity id="carro">
+          <a-box position="0 0.5 0" width="1" height="0.5" depth="2" color="#4CC3D9"></a-box>
+          <a-box position="0 0.9 0" width="0.8" height="0.4" depth="1" color="#FFF"></a-box>
+          
+          <a-cylinder position="-0.6 0.2 0.6" rotation="0 0 90" radius="0.2" height="0.1" color="#111"></a-cylinder>
+          <a-cylinder position="0.6 0.2 0.6" rotation="0 0 90" radius="0.2" height="0.1" color="#111"></a-cylinder>
+          <a-cylinder position="-0.6 0.2 -0.6" rotation="0 0 90" radius="0.2" height="0.1" color="#111"></a-cylinder>
+          <a-cylinder position="0.6 0.2 -0.6" rotation="0 0 90" radius="0.2" height="0.1" color="#111"></a-cylinder>
+        </a-entity>
 
-    <!-- Câmera -->
-    <a-entity id="cameraRig" position="0 3 8">
-      <a-camera></a-camera>
-    </a-entity>
+        <a-entity camera position="0 2 4" rotation="-15 0 0" look-controls-enabled="false"></a-entity>
+      </a-entity>
 
-    <!-- Chão -->
-    <a-plane rotation="-90 0 0" width="50" height="50" color="#7BC8A4"></a-plane>
-
-    <!-- Carro -->
-    <a-entity id="car" position="0 0.5 0">
-
-      <!-- Corpo -->
-      <a-box position="0 0 0" depth="2" height="0.5" width="1.5" color="red"></a-box>
-
-      <!-- Cabine -->
-      <a-box position="0 0.5 -0.3" depth="1" height="0.5" width="1.2" color="blue"></a-box>
-
-      <!-- Rodas -->
-      <a-cylinder position="0.7 -0.3 0.8" radius="0.3" height="0.2" rotation="90 0 0" color="black"></a-cylinder>
-      <a-cylinder position="-0.7 -0.3 0.8" radius="0.3" height="0.2" rotation="90 0 0" color="black"></a-cylinder>
-      <a-cylinder position="0.7 -0.3 -0.8" radius="0.3" height="0.2" rotation="90 0 0" color="black"></a-cylinder>
-      <a-cylinder position="-0.7 -0.3 -0.8" radius="0.3" height="0.2" rotation="90 0 0" color="black"></a-cylinder>
-
-    </a-entity>
-
-  </a-scene>
-
-  <script>
-  const car = document.querySelector("#car");
-  const cameraRig = document.querySelector("#cameraRig");
-
-  let x = 0;
-  let z = 0;
-
-  document.addEventListener("keydown", function (e) {
-
-    const speed = 0.3;
-
-    if (e.key === "w") z -= speed;
-    if (e.key === "s") z += speed;
-    if (e.key === "a") x -= speed;
-    if (e.key === "d") x += speed;
-
-    // MOVE O CARRO
-    car.setAttribute("position", {
-      x: x,
-      y: 0.5,
-      z: z
-    });
-
-    // MOVE A CÂMERA JUNTO
-    cameraRig.setAttribute("position", {
-      x: x,
-      y: 3,
-      z: z + 8
-    });
-
-  });
-
-
-
-  </script>
-
-</body>
+    </a-scene>
+  </body>
 </html>
