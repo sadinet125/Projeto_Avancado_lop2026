@@ -37,39 +37,36 @@
   </a-scene>
 
   <script>
-   
-   
-AFRAME.registerComponent('movimento-carro', {
-  init: function () {
+  const car = document.querySelector("#car");
+  const cameraRig = document.querySelector("#cameraRig");
 
-    this.position = { x: 0, z: 0 };
+  let x = 0;
+  let z = 0;
 
-    window.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", function (e) {
 
-      const speed = 0.2;
+    const speed = 0.3;
 
-      if (e.key === "w") this.position.z -= speed;
-      if (e.key === "s") this.position.z += speed;
-      if (e.key === "a") this.position.x -= speed;
-      if (e.key === "d") this.position.x += speed;
+    if (e.key === "w") z -= speed;
+    if (e.key === "s") z += speed;
+    if (e.key === "a") x -= speed;
+    if (e.key === "d") x += speed;
 
-      // move o carro
-      this.el.object3D.position.set(
-        this.position.x,
-        0.5,
-        this.position.z
-      );
-
-      // move a câmera junto
-      const cam = document.querySelector("#cameraRig");
-      cam.object3D.position.set(
-        this.position.x,
-        3,
-        this.position.z + 8
-      );
+    // MOVE O CARRO
+    car.setAttribute("position", {
+      x: x,
+      y: 0.5,
+      z: z
     });
-  }
-});
+
+    // MOVE A CÂMERA JUNTO
+    cameraRig.setAttribute("position", {
+      x: x,
+      y: 3,
+      z: z + 8
+    });
+
+  });
 
 
 
