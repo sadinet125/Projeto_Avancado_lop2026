@@ -38,32 +38,39 @@
 
   <script>
    
-  
-  window.onload = () => {
+   
+AFRAME.registerComponent('movimento-carro', {
+  init: function () {
 
-    const car = document.querySelector("#car");
-    const cameraRig = document.querySelector("#cameraRig");
+    this.position = { x: 0, z: 0 };
 
-    let position = { x: 0, z: 0 };
-
-    document.addEventListener("keydown", (e) => {
+    window.addEventListener("keydown", (e) => {
 
       const speed = 0.2;
 
-      if (e.key === "w") position.z -= speed;
-      if (e.key === "s") position.z += speed;
-      if (e.key === "a") position.x -= speed;
-      if (e.key === "d") position.x += speed;
+      if (e.key === "w") this.position.z -= speed;
+      if (e.key === "s") this.position.z += speed;
+      if (e.key === "a") this.position.x -= speed;
+      if (e.key === "d") this.position.x += speed;
 
-      // Move carro
-      car.object3D.position.set(position.x, 0.5, position.z);
+      // move o carro
+      this.el.object3D.position.set(
+        this.position.x,
+        0.5,
+        this.position.z
+      );
 
-      // Move câmera junto
-      cameraRig.object3D.position.set(position.x, 3, position.z + 8);
-
+      // move a câmera junto
+      const cam = document.querySelector("#cameraRig");
+      cam.object3D.position.set(
+        this.position.x,
+        3,
+        this.position.z + 8
+      );
     });
+  }
+});
 
-  };
 
 
   </script>
