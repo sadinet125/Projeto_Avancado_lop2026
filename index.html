@@ -38,29 +38,33 @@
 
   <script>
    
-  const car = document.querySelector("#car");
-  const cameraRig = document.querySelector("#cameraRig");
+  
+  window.onload = () => {
 
-  let position = { x: 0, z: 0 };
+    const car = document.querySelector("#car");
+    const cameraRig = document.querySelector("#cameraRig");
 
-  document.addEventListener("keydown", (e) => {
+    let position = { x: 0, z: 0 };
 
-    const speed = 0.2;
+    document.addEventListener("keydown", (e) => {
 
-    if (e.key === "w") position.z -= speed;
-    if (e.key === "s") position.z += speed;
-    if (e.key === "a") position.x -= speed;
-    if (e.key === "d") position.x += speed;
+      const speed = 0.2;
 
-    // Move carro (forma correta)
-    car.object3D.position.x = position.x;
-    car.object3D.position.z = position.z;
+      if (e.key === "w") position.z -= speed;
+      if (e.key === "s") position.z += speed;
+      if (e.key === "a") position.x -= speed;
+      if (e.key === "d") position.x += speed;
 
-    // Câmera segue o carro
-    cameraRig.object3D.position.x = position.x;
-    cameraRig.object3D.position.z = position.z + 8;
+      // Move carro
+      car.object3D.position.set(position.x, 0.5, position.z);
 
-  });
+      // Move câmera junto
+      cameraRig.object3D.position.set(position.x, 3, position.z + 8);
+
+    });
+
+  };
+
 
   </script>
 
