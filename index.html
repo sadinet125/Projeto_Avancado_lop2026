@@ -1,270 +1,147 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Carro A-Frame</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.5.0/aframe.min.js"></script>
+  <meta charset="utf-8">
+  <title>Carro</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <style>
-    body { margin: 0; overflow: hidden; }
     #hud {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.6);
       color: #fff;
       font-family: sans-serif;
       font-size: 14px;
       padding: 8px 20px;
       border-radius: 20px;
       pointer-events: none;
-      z-index: 10;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
 
-  <div id="hud">↑ ↓ ← → para mover o carro</div>
+<div id="hud">W/S = frente/trás &nbsp;|&nbsp; A/D = virar</div>
 
-  <a-scene shadow="type:pcfsoft" fog="type:linear;color:#87CEEB;near:30;far:80">
+<a-scene>
 
-    <a-assets>
-      <!-- Roda: cilindro deitado -->
-      <a-mixin id="wheel"
-        geometry="primitive:cylinder;radius:0.38;height:0.28;segmentsRadial:18"
-        material="color:#222;roughness:0.9"
-        rotation="0 0 90">
-      </a-mixin>
+  <!-- câmera -->
+  <a-entity id="cameraRig" position="0 3 8">
+    <a-camera wasd-controls-enabled="false" look-controls="enabled:false"></a-camera>
+  </a-entity>
 
-      <!-- Calota -->
-      <a-mixin id="hubcap"
-        geometry="primitive:cylinder;radius:0.18;height:0.06;segmentsRadial:12"
-        material="color:#aaa;roughness:0.4"
-        rotation="0 0 90">
-      </a-mixin>
-    </a-assets>
+  <!-- chão -->
+  <a-plane rotation="-90 0 0" width="200" height="200" color="#7BC8A4"></a-plane>
 
-    <!-- ===================== CARRO ===================== -->
-    <a-entity id="car" position="0 0.55 0">
+  <!-- pista -->
+  <a-plane rotation="-90 0 0" position="0 0.01 0" width="6" height="200" color="#555555"></a-plane>
 
-      <!-- Chassi / corpo -->
-      <a-box position="0 0.26 0"
-             width="1.8" height="0.55" depth="3.6"
-             material="color:#D84D1E;roughness:0.5;metalness:0.3"
-             shadow="cast:true">
-      </a-box>
+  <!-- carro -->
+  <a-entity id="car" position="0 0.5 0" rotation="0 0 0">
 
-      <!-- Cabine -->
-      <a-box position="0 0.72 -0.1"
-             width="1.5" height="0.55" depth="1.8"
-             material="color:#BF3C12;roughness:0.5;metalness:0.3"
-             shadow="cast:true">
-      </a-box>
+    <!-- corpo -->
+    <a-box position="0 0 0" depth="2" height="0.5" width="1.5" color="red"></a-box>
 
-      <!-- Para-brisa dianteiro -->
-      <a-box position="0 0.85 0.65"
-             width="1.4" height="0.38" depth="0.08"
-             material="color:#9FD8F5;opacity:0.6;transparent:true">
-      </a-box>
+    <!-- cabine -->
+    <a-box position="0 0.5 -0.3" depth="1" height="0.5" width="1.2" color="blue"></a-box>
 
-      <!-- Vidro traseiro -->
-      <a-box position="0 0.85 -0.95"
-             width="1.4" height="0.38" depth="0.08"
-             material="color:#9FD8F5;opacity:0.6;transparent:true">
-      </a-box>
-
-      <!-- Pilares laterais -->
-      <a-box position=" 0.74 0.62 0" width="0.06" height="0.55" depth="1.82"
-             material="color:#BF3C12"></a-box>
-      <a-box position="-0.74 0.62 0" width="0.06" height="0.55" depth="1.82"
-             material="color:#BF3C12"></a-box>
-
-      <!-- Faróis dianteiros -->
-      <a-sphere position=" 0.7 0.1 1.4" radius="0.12"
-                material="color:#FFD700;emissive:#FFD700;emissiveIntensity:0.5">
-      </a-sphere>
-      <a-sphere position="-0.7 0.1 1.4" radius="0.12"
-                material="color:#FFD700;emissive:#FFD700;emissiveIntensity:0.5">
-      </a-sphere>
-
-      <!-- Lanternas traseiras -->
-      <a-sphere position=" 0.7 0.1 -1.4" radius="0.12"
-                material="color:#FF2222;emissive:#FF2222;emissiveIntensity:0.5">
-      </a-sphere>
-      <a-sphere position="-0.7 0.1 -1.4" radius="0.12"
-                material="color:#FF2222;emissive:#FF2222;emissiveIntensity:0.5">
-      </a-sphere>
-
-      <!-- ===== RODAS ===== -->
-      <!-- Dianteira direita -->
-      <a-entity class="wheel-spin" mixin="wheel" position=" 1.02 -0.18  1.1" shadow="cast:true"></a-entity>
-      <!-- Dianteira esquerda -->
-      <a-entity class="wheel-spin" mixin="wheel" position="-1.02 -0.18  1.1" shadow="cast:true"></a-entity>
-      <!-- Traseira direita -->
-      <a-entity class="wheel-spin" mixin="wheel" position=" 1.02 -0.18 -1.1" shadow="cast:true"></a-entity>
-      <!-- Traseira esquerda -->
-      <a-entity class="wheel-spin" mixin="wheel" position="-1.02 -0.18 -1.1" shadow="cast:true"></a-entity>
-
-      <!-- ===== CALOTAS ===== -->
-      <a-entity mixin="hubcap" position=" 1.165 -0.18  1.1"></a-entity>
-      <a-entity mixin="hubcap" position="-1.165 -0.18  1.1"></a-entity>
-      <a-entity mixin="hubcap" position=" 1.165 -0.18 -1.1"></a-entity>
-      <a-entity mixin="hubcap" position="-1.165 -0.18 -1.1"></a-entity>
-
-    </a-entity>
-    <!-- ================== FIM DO CARRO ================== -->
-
-
-    <!-- ===================== CÂMERA ===================== -->
     <!--
-      O camera-rig é posicionado e rotacionado via JS
-      para seguir o carro. A câmera fica dentro dele,
-      olhando levemente para baixo.
+      RODAS: rotation="0 0 90" deixa o cilindro deitado (eixo no X).
+      Assim a roda fica no plano certo e gira para frente ao mudar X da rotation.
     -->
-    <a-entity id="camera-rig" position="0 4 7">
-      <a-camera
-        look-controls="enabled:false"
-        wasd-controls="enabled:false"
-        rotation="-22 0 0"
-        fov="65">
-      </a-camera>
-    </a-entity>
+    <a-cylinder id="roda-fd" position=" 0.85 -0.25  0.8" radius="0.25" height="0.15" rotation="0 0 90" color="black"></a-cylinder>
+    <a-cylinder id="roda-fe" position="-0.85 -0.25  0.8" radius="0.25" height="0.15" rotation="0 0 90" color="black"></a-cylinder>
+    <a-cylinder id="roda-td" position=" 0.85 -0.25 -0.8" radius="0.25" height="0.15" rotation="0 0 90" color="black"></a-cylinder>
+    <a-cylinder id="roda-te" position="-0.85 -0.25 -0.8" radius="0.25" height="0.15" rotation="0 0 90" color="black"></a-cylinder>
 
+  </a-entity>
 
-    <!-- ===================== CENÁRIO ===================== -->
+  <!-- objetos de referência -->
+  <a-box position=" 6 0.5  0"  width="1" height="1" depth="1" color="#888"></a-box>
+  <a-box position="-6 0.5 -10" width="1" height="1" depth="1" color="#888"></a-box>
+  <a-box position=" 6 0.5 -20" width="1" height="1" depth="1" color="#888"></a-box>
 
-    <!-- Grama -->
-    <a-plane position="0 0 0" rotation="-90 0 0"
-             width="300" height="300"
-             material="color:#5A8F3C;roughness:1"
-             shadow="receive:true">
-    </a-plane>
+  <!-- árvores -->
+  <a-entity position="8 0 5">
+    <a-cylinder radius="0.2" height="2" position="0 1 0" color="#5D4037"></a-cylinder>
+    <a-cone radius-bottom="1.5" height="2.5" position="0 3 0" color="#2E7D32"></a-cone>
+  </a-entity>
+  <a-entity position="-8 0 -15">
+    <a-cylinder radius="0.2" height="2" position="0 1 0" color="#5D4037"></a-cylinder>
+    <a-cone radius-bottom="1.5" height="2.5" position="0 3 0" color="#2E7D32"></a-cone>
+  </a-entity>
 
-    <!-- Pista asfaltada -->
-    <a-plane position="0 0.01 0" rotation="-90 0 0"
-             width="6" height="300"
-             material="color:#555;roughness:1">
-    </a-plane>
+  <a-sky color="#87CEEB"></a-sky>
+  <a-light type="ambient" intensity="0.8"></a-light>
+  <a-light type="directional" position="5 10 5" intensity="0.8"></a-light>
 
-    <!-- Faixa central -->
-    <a-plane position="0 0.015 0" rotation="-90 0 0"
-             width="0.25" height="300"
-             material="color:#FFE135;roughness:1">
-    </a-plane>
+</a-scene>
 
-    <!-- Objetos de referência na cena -->
-    <a-box position=" 8 0.5  10" width="1" height="1" depth="1" material="color:#888" shadow="cast:true"></a-box>
-    <a-box position="-8 0.5 -10" width="1" height="1" depth="1" material="color:#888" shadow="cast:true"></a-box>
-    <a-box position=" 12 0.5 -25" width="1" height="1" depth="1" material="color:#888" shadow="cast:true"></a-box>
-    <a-box position="-12 0.5  25" width="1" height="1" depth="1" material="color:#888" shadow="cast:true"></a-box>
+<script>
+window.onload = function () {
 
-    <!-- Árvores simples (cilindro + cone) -->
-    <a-entity position="10 0 5">
-      <a-cylinder position="0 0.8 0" radius="0.2" height="1.6" material="color:#6B3A2A"></a-cylinder>
-      <a-cone position="0 2.3 0" radius-bottom="1" height="1.8" material="color:#2E7D32"></a-cone>
-    </a-entity>
-    <a-entity position="-10 0 -8">
-      <a-cylinder position="0 0.8 0" radius="0.2" height="1.6" material="color:#6B3A2A"></a-cylinder>
-      <a-cone position="0 2.3 0" radius-bottom="1" height="1.8" material="color:#2E7D32"></a-cone>
-    </a-entity>
-    <a-entity position="11 0 -20">
-      <a-cylinder position="0 0.8 0" radius="0.2" height="1.6" material="color:#6B3A2A"></a-cylinder>
-      <a-cone position="0 2.3 0" radius-bottom="1" height="1.8" material="color:#2E7D32"></a-cone>
-    </a-entity>
-    <a-entity position="-11 0 20">
-      <a-cylinder position="0 0.8 0" radius="0.2" height="1.6" material="color:#6B3A2A"></a-cylinder>
-      <a-cone position="0 2.3 0" radius-bottom="1" height="1.8" material="color:#2E7D32"></a-cone>
-    </a-entity>
+  var car  = document.getElementById("car");
+  var cam  = document.getElementById("cameraRig");
+  var rodas = [
+    document.getElementById("roda-fd"),
+    document.getElementById("roda-fe"),
+    document.getElementById("roda-td"),
+    document.getElementById("roda-te")
+  ];
 
-    <!-- Céu -->
-    <a-sky color="#87CEEB"></a-sky>
+  var posX    = 0;
+  var posZ    = 0;
+  var angulo  = 0;   // rotação Y do carro (graus)
+  var rodaRot = 0;   // giro acumulado das rodas
 
-    <!-- Iluminação -->
-    <a-light type="ambient"     color="#fff" intensity="0.6"></a-light>
-    <a-light type="directional" color="#fff" intensity="0.9"
-             position="5 10 5" cast-shadow="true">
-    </a-light>
+  var vel  = 0.06;
+  var giro = 2.0;
 
-  </a-scene>
+  var keys = {};
+  window.addEventListener("keydown", function(e) { keys[e.key] = true; });
+  window.addEventListener("keyup",   function(e) { keys[e.key] = false; });
 
+  function loop() {
+    requestAnimationFrame(loop);
 
-  <script>
-    // =====================================================
-    //  Controle do carro com teclado + câmera seguindo
-    // =====================================================
-    const scene = document.querySelector('a-scene');
+    var dir = 0;
+    if (keys["w"] || keys["W"] || keys["ArrowUp"])   dir =  1;
+    if (keys["s"] || keys["S"] || keys["ArrowDown"]) dir = -1;
 
-    scene.addEventListener('loaded', () => {
+    if (dir !== 0) {
+      // Vira enquanto em movimento
+      if (keys["a"] || keys["A"] || keys["ArrowLeft"])  angulo += giro * dir;
+      if (keys["d"] || keys["D"] || keys["ArrowRight"]) angulo -= giro * dir;
 
-      const car    = document.getElementById('car');
-      const rig    = document.getElementById('camera-rig');
-      const wheels = document.querySelectorAll('.wheel-spin');
+      // Move na direção que o carro aponta
+      var rad = angulo * Math.PI / 180;
+      posX -= Math.sin(rad) * vel * dir;
+      posZ -= Math.cos(rad) * vel * dir;
 
-      const keys       = {};          // teclas pressionadas
-      const speed      = 0.08;        // velocidade de translação
-      const turnSpeed  = 1.8;         // graus por frame ao virar
-
-      // Estado do carro
-      let carRotY  = 0;              // rotação Y do carro (graus)
-      let posX     = 0;
-      let posZ     = 0;
-      let wheelRot = 0;              // rotação acumulada das rodas
-
-      // Registra teclas
-      window.addEventListener('keydown', e => {
-        keys[e.key] = true;
-        // Evita rolar a página com setas
-        if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))
-          e.preventDefault();
+      // Gira as rodas
+      rodaRot += 3 * dir;
+      rodas.forEach(function(r) {
+        r.setAttribute("rotation", rodaRot + " 0 90");
       });
-      window.addEventListener('keyup', e => { keys[e.key] = false; });
+    }
 
-      // Loop principal
-      function tick() {
-        requestAnimationFrame(tick);
+    // Atualiza carro
+    car.setAttribute("position", posX + " 0.5 " + posZ);
+    car.setAttribute("rotation", "0 " + angulo + " 0");
 
-        let direction = 0; // +1 frente, -1 ré
+    // Câmera atrás do carro
+    var rad  = angulo * Math.PI / 180;
+    var camX = posX + Math.sin(rad) * 8;
+    var camZ = posZ + Math.cos(rad) * 8;
+    cam.setAttribute("position", camX + " 3 " + camZ);
+    cam.setAttribute("rotation", "0 " + angulo + " 0");
+  }
 
-        if (keys['ArrowUp']   || keys['w'] || keys['W']) direction =  1;
-        if (keys['ArrowDown'] || keys['s'] || keys['S']) direction = -1;
-
-        if (direction !== 0) {
-          // Virar só enquanto em movimento
-          if (keys['ArrowLeft']  || keys['a'] || keys['A']) carRotY += turnSpeed * direction;
-          if (keys['ArrowRight'] || keys['d'] || keys['D']) carRotY -= turnSpeed * direction;
-
-          // Translação na direção atual do carro
-          const rad = THREE.MathUtils.degToRad(carRotY);
-          posX -= Math.sin(rad) * speed * direction;
-          posZ -= Math.cos(rad) * speed * direction;
-
-          // Gira as rodas
-          wheelRot += 4 * direction;
-          wheels.forEach(w => {
-            w.setAttribute('rotation', `${wheelRot} 0 90`);
-          });
-        }
-
-        // Aplica posição e rotação ao carro
-        car.setAttribute('position', `${posX} 0.55 ${posZ}`);
-        car.setAttribute('rotation', `0 ${carRotY} 0`);
-
-        // ---- Câmera segue o carro ----
-        // Offset atrás do carro no espaço do carro → mundo
-        const rad    = THREE.MathUtils.degToRad(carRotY);
-        const dist   = 7;   // distância atrás
-        const height = 4;   // altura
-
-        const camX = posX + Math.sin(rad) * dist;
-        const camZ = posZ + Math.cos(rad) * dist;
-
-        rig.setAttribute('position', `${camX} ${height} ${camZ}`);
-        rig.setAttribute('rotation', `0 ${carRotY} 0`);
-      }
-
-      tick();
-    });
-  </script>
+  loop();
+};
+</script>
 
 </body>
 </html>
