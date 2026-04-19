@@ -85,18 +85,18 @@ window.onload = function () {
       posX -= Math.sin(rad) * vel * dir;
       posZ -= Math.cos(rad) * vel * dir;
 
-      // Gira as rodas
+      // rotacao das rodas
       rodaRot += 3 * dir;
       rodas.forEach(function(r) {
         r.setAttribute("rotation", rodaRot + " 0 90");
       });
     }
 
-    // Atualiza carro
+    // atualiza o carro
     car.setAttribute("position", posX + " 0.5 " + posZ);
     car.setAttribute("rotation", "0 " + angulo + " 0");
 
-    // Câmera atrás do carro
+    // camera atrás do carro
     var rad  = angulo * Math.PI / 180;
     var camX = posX + Math.sin(rad) * 8;
     var camZ = posZ + Math.cos(rad) * 8;
