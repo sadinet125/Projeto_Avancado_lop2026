@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Carro</title>
+  <title>CarroPA</title>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
 </head>
@@ -61,10 +61,10 @@ window.onload = function () {
     document.getElementById("roda-te")
   ];
 
-  var posX    = 0;
-  var posZ    = 0;
+  var posx    = 0;
+  var posz    = 0;
   var angulo  = 0;   // rotação Y do carro (graus)
-  var rodaRot = 0;   // giro acumulado das rodas
+  var rodarot = 0;   // giro acumulado das rodas
 
   var vel  = 0.06;
   var giro = 2.0;
@@ -85,26 +85,26 @@ window.onload = function () {
       if (keys["a"] || keys["A"] ) angulo += giro * dir;
       if (keys["d"] || keys["D"] ) angulo -= giro * dir;
 
-      // Move na direção que o carro aponta
+      // Faz o carro mover no sentido apontado, usando seno e cosseno para atualizar as posições no plano
       var rad = angulo * Math.PI / 180;
-      posX -= Math.sin(rad) * vel * dir;
-      posZ -= Math.cos(rad) * vel * dir;
+      posx -= Math.sin(rad) * vel * dir;
+      posz -= Math.cos(rad) * vel * dir;
 
       // rotacao das rodas
-      rodaRot += 3 * dir;
+      rodarot += 3 * dir;
       rodas.forEach(function(r) {
-        r.setAttribute("rotation", rodaRot + " 0 90");
+        r.setAttribute("rotation", rodarot + " 0 90");
       });
     }
 
     // atualiza o carro
-    car.setAttribute("position", posX + " 0.5 " + posZ);
+    car.setAttribute("position", posx + " 0.5 " + posz);
     car.setAttribute("rotation", "0 " + angulo + " 0");
 
     // camera atrás do carro
     var rad  = angulo * Math.PI / 180;
-    var camX = posX + Math.sin(rad) * 8;
-    var camZ = posZ + Math.cos(rad) * 8;
+    var camX = posx + Math.sin(rad) * 8;
+    var camZ = posz + Math.cos(rad) * 8;
     cam.setAttribute("position", camX + " 3 " + camZ);
     cam.setAttribute("rotation", "0 " + angulo + " 0");
   }
