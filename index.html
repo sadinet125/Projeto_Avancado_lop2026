@@ -31,7 +31,7 @@
   <a-plane rotation="-90 0 0" position="0 0.03 0" width="6" height="200" color="gray"></a-plane>
 
   <!-- carro -->
-  <a-entity id="car" position="0 0.5 0" rotation="0 0 0">
+  <a-entity id="carro" position="0 0.5 0" rotation="0 0 0">
 
     <!-- inferior -->
     <a-box position="0 0 0" depth="2" height="0.5" width="1.5" color="white"></a-box>
@@ -52,31 +52,31 @@
 <script>
 window.onload = function () {
 
-  var car  = document.getElementById("car");
-  var cam  = document.getElementById("cameraPer");
-  var rodas = [
+  let carro  = document.getElementById("carro");
+  let cam  = document.getElementById("cameraPer");
+  let rodas = [
     document.getElementById("roda-fd"),
     document.getElementById("roda-fe"),
     document.getElementById("roda-td"),
     document.getElementById("roda-te")
   ];
 
-  var posx    = 0;
-  var posz    = 0;
-  var angulo  = 0;   // rotação Y do carro (graus)
-  var rodarot = 0;   // giro acumulado das rodas
+  let posx    = 0;
+  let posz    = 0;
+  let angulo  = 0;   //
+  let rodarot = 0;   // giro acumulado das rodas
 
-  var vel  = 0.06;
-  var giro = 2.0;
+  let vel  = 0.06;
+  let giro = 2.0;
 
-  var keys = {};
+  let keys = {};
   window.addEventListener("keydown", function(e) { keys[e.key] = true; });
   window.addEventListener("keyup",   function(e) { keys[e.key] = false; });
 
   function loop() {
     requestAnimationFrame(loop);
 
-    var dir = 0;
+    let dir = 0;
     if (keys["w"] || keys["W"] ) dir =  1;
     if (keys["s"] || keys["S"] ) dir = -1;
 
@@ -86,7 +86,7 @@ window.onload = function () {
       if (keys["d"] || keys["D"] ) angulo -= giro * dir;
 
       // Faz o carro mover no sentido apontado, usando seno e cosseno para atualizar as posições no plano
-      var rad = angulo * Math.PI / 180;
+      let rad = angulo * Math.PI / 180;
       posx -= Math.sin(rad) * vel * dir;
       posz -= Math.cos(rad) * vel * dir;
 
@@ -97,14 +97,14 @@ window.onload = function () {
       });
     }
 
-    // atualiza o carro
-    car.setAttribute("position", posx + " 0.5 " + posz);
-    car.setAttribute("rotation", "0 " + angulo + " 0");
+    // atualiza a posição do carro 
+    carro.setAttribute("position", posx + " 0.5 " + posz);
+    carro.setAttribute("rotation", "0 " + angulo + " 0");
 
     // camera atrás do carro
-    var rad  = angulo * Math.PI / 180;
-    var camX = posx + Math.sin(rad) * 8;
-    var camZ = posz + Math.cos(rad) * 8;
+    let rad  = angulo * Math.PI / 180;
+    let camX = posx + Math.sin(rad) * 8;
+    let camZ = posz + Math.cos(rad) * 8;
     cam.setAttribute("position", camX + " 3 " + camZ);
     cam.setAttribute("rotation", "0 " + angulo + " 0");
   }
