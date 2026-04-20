@@ -18,7 +18,7 @@
   </a-entity>
 
   <!-- câmera -->
-  <a-entity id="cameraRig" position="0 3 8">
+  <a-entity id="cameraPer" position="0 3 8">
     <a-camera wasd-controls-enabled="false" look-controls="enabled:false"></a-camera>
   </a-entity>
 
@@ -53,7 +53,7 @@
 window.onload = function () {
 
   var car  = document.getElementById("car");
-  var cam  = document.getElementById("cameraRig");
+  var cam  = document.getElementById("cameraPer");
   var rodas = [
     document.getElementById("roda-fd"),
     document.getElementById("roda-fe"),
@@ -77,13 +77,13 @@ window.onload = function () {
     requestAnimationFrame(loop);
 
     var dir = 0;
-    if (keys["w"] || keys["W"] || keys["ArrowUp"])   dir =  1;
-    if (keys["s"] || keys["S"] || keys["ArrowDown"]) dir = -1;
+    if (keys["w"] || keys["W"] ) dir =  1;
+    if (keys["s"] || keys["S"] ) dir = -1;
 
     if (dir !== 0) {
       // Vira enquanto em movimento
-      if (keys["a"] || keys["A"] || keys["ArrowLeft"])  angulo += giro * dir;
-      if (keys["d"] || keys["D"] || keys["ArrowRight"]) angulo -= giro * dir;
+      if (keys["a"] || keys["A"] ) angulo += giro * dir;
+      if (keys["d"] || keys["D"] ) angulo -= giro * dir;
 
       // Move na direção que o carro aponta
       var rad = angulo * Math.PI / 180;
